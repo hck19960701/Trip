@@ -8,6 +8,7 @@
     :root{
       --bg:#0b0f1a; --panel:#10182a; --btn:#0e1526;
       --text:#eaf0ff; --muted:#a9b7d6; --border:#243656; --accent:#7aa2ff;
+      --ok:#38d39f; --warn:#ffcc66; --bad:#ff6b6b;
     }
     *{ box-sizing:border-box; font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC",Arial; }
     body{ margin:0; background:linear-gradient(180deg,#071022 0%,#070a12 100%); color:var(--text); }
@@ -29,7 +30,7 @@
     .head{
       padding:12px 14px;
       border-bottom:1px solid var(--border);
-      display:flex; justify-content:space-between; align-items:center;
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
     }
     .title{ font-weight:700; font-size:14px; color:#cfe0ff; display:flex; gap:10px; align-items:center; }
     .small{ font-size:12px; color:var(--muted); }
@@ -63,7 +64,7 @@
 
     textarea{
       width:100%;
-      min-height:220px;
+      min-height:260px;
       padding:12px;
       border-radius:14px;
       border:1px solid var(--border);
@@ -75,7 +76,7 @@
       line-height:1.45;
     }
 
-    .row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    .row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; align-items:center; }
     button{
       padding:10px 12px;
       border-radius:12px;
@@ -86,6 +87,7 @@
       font-size:13px;
     }
     button:hover{ filter:brightness(1.08); }
+    button.primary{ border-color:var(--accent); }
     .pill{
       display:inline-block;
       padding:3px 8px;
@@ -95,6 +97,15 @@
       color:var(--muted);
       font-size:12px;
     }
+
+    .statusLine{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+      margin-top:10px; color:var(--muted); font-size:12px;
+    }
+    .dot{ width:8px; height:8px; border-radius:999px; display:inline-block; background:var(--muted); }
+    .dot.ok{ background:var(--ok); }
+    .dot.warn{ background:var(--warn); }
+    .dot.bad{ background:var(--bad); }
 
     .version{
       position:fixed;
@@ -114,7 +125,7 @@
 
 <header>
   <h1>Trip Hub</h1>
-  <p class="sub">分區按鈕直接開網站（滑雪 / 常用工具）＋ 右邊快速備忘（自動保存）。</p>
+  <p class="sub">分區按鈕直接開網站（滑雪 / 常用工具）＋ 右邊共享備忘（所有人可見）。</p>
 </header>
 
 <div class="wrap">
@@ -138,7 +149,7 @@
 
           <div class="btnGrid">
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-              href="https://www.grand-hirafu.jp/en/tickets/">
+               href="https://www.grand-hirafu.jp/en/tickets/">
               <div>
                 <div>🎟️ 二世古門票 / Lift Tickets</div>
                 <div class="hint">查看票種 / 價格 / 購買</div>
@@ -147,7 +158,7 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-              href="https://www.grand-hirafu.jp/en/rentals/#winterSection">
+               href="https://www.grand-hirafu.jp/en/rentals/#winterSection">
               <div>
                 <div>🧤 二世古租裝備 / Rentals</div>
                 <div class="hint">租借滑雪板 / 雪具 / 配件</div>
@@ -166,7 +177,7 @@
 
           <div class="btnGrid">
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-              href="https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing">
+               href="https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing">
               <div>
                 <div>📅 行程列表（Google Sheets）</div>
                 <div class="hint">查看 / 編輯你的行程表</div>
@@ -175,7 +186,7 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-              href="https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt">
+               href="https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt">
               <div>
                 <div>🌤️ 日本天氣（JMA）</div>
                 <div class="hint">查降雪 / 風雨 / 旅遊天氣</div>
@@ -183,9 +194,8 @@
               <div>↗</div>
             </a>
 
-            <!-- ✅ 新增：Google Maps -->
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-              href="https://www.google.com/maps">
+               href="https://www.google.com/maps">
               <div>
                 <div>📍 Google Maps（地圖 / 導航）</div>
                 <div class="hint">找景點 / 導航 / 看附近</div>
@@ -193,9 +203,8 @@
               <div>↗</div>
             </a>
 
-            <!-- ✅ 新增：Tabelog -->
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-              href="https://tabelog.com/en/">
+               href="https://tabelog.com/en/">
               <div>
                 <div>🍜 Tabelog（餐廳評價 / 訂位參考）</div>
                 <div class="hint">日本餐廳評分、熱門店搜尋</div>
@@ -204,7 +213,7 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-              href="https://www.locationsmart.org/?tag=_service_parking&fbclid=IwVERDUAPJeUVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR6ssiv6PhqEedxS2tISnSzp160WObttracGFhmHj_QjcMUtXCFLLiPNm2EpBg">
+               href="https://www.locationsmart.org/?tag=_service_parking&fbclid=IwVERDUAPJeUVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR6ssiv6PhqEedxS2tISnSzp160WObttracGFhmHj_QjcMUtXCFLLiPNm2EpBg">
               <div>
                 <div>🅿️ 日本停車場參考（LocationSmart）</div>
                 <div class="hint">找停車位 / 收費資訊</div>
@@ -213,7 +222,7 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-              href="https://www.vjw.digital.go.jp/main/#/vjwplo001">
+               href="https://www.vjw.digital.go.jp/main/#/vjwplo001">
               <div>
                 <div>🛂 日本簽證 / VJW（Visit Japan Web）</div>
                 <div class="hint">入境資料 / 申報 / 旅客流程</div>
@@ -231,17 +240,24 @@
       </div>
     </section>
 
-    <!-- 右：備忘 -->
+    <!-- 右：共享備忘 -->
     <section class="panel">
       <div class="head">
-        <div class="title">快速備忘 <span class="pill">自動保存</span></div>
-        <div class="small">每個人各自保存</div>
+        <div class="title">共享備忘 <span class="pill">所有人可見</span></div>
+        <div class="small" id="rightInfo">載入中…</div>
       </div>
       <div class="body">
-        <textarea id="notes" placeholder="【住宿 / 地址】\n\n【交通 / 停車 / 租車】\n\n【訂單 / QR Code】\n\n【想去的店】\n\n【注意事項】"></textarea>
+        <textarea id="sharedNotes" placeholder="【住宿 / 地址】&#10;&#10;【交通 / 停車 / 租車】&#10;&#10;【訂單 / QR Code】&#10;&#10;【想去的店】&#10;&#10;【注意事項】"></textarea>
+
         <div class="row">
-          <button id="clearNotes">清空備忘</button>
-          <button id="copyNotes">複製備忘</button>
+          <button id="loadShared">重新載入</button>
+          <button id="saveShared" class="primary">儲存共享備忘</button>
+          <button id="copyShared">複製備忘</button>
+        </div>
+
+        <div class="statusLine">
+          <span class="dot" id="dot"></span>
+          <span id="statusText">尚未載入</span>
         </div>
       </div>
     </section>
@@ -249,31 +265,13 @@
   </div>
 </div>
 
-<!-- ✅ 版本號：你每次更新改這行就行 -->
-<div class="version" id="version">Version: 2026-01-07 v1.3</div>
+<div class="version">Version: 2026-01-07 v1.4</div>
 
 <script>
-  const KEY = "trip_hub_notes_v1";
-  const notes = document.getElementById("notes");
-  notes.value = localStorage.getItem(KEY) || notes.value;
-  notes.addEventListener("input", () => localStorage.setItem(KEY, notes.value || ""));
+  // ✅ 你的 Google Apps Script Web App URL
+  const API_URL = "https://script.google.com/macros/s/AKfycbzMloCs3ijsf-7SlajvG6PaB93tXnto3bpl26nKyc0TphEFmvWHa2YGl_CDffGr0Z1T/exec";
 
-  document.getElementById("clearNotes").onclick = () => {
-    if(!confirm("確定清空備忘？")) return;
-    notes.value = "";
-    localStorage.setItem(KEY, "");
-  };
-
-  document.getElementById("copyNotes").onclick = async () => {
-    try{
-      await navigator.clipboard.writeText(notes.value || "");
-      alert("已複製到剪貼簿");
-    }catch{
-      alert("你的瀏覽器不允許自動複製，可手動選取複製。");
-    }
-  };
-
-  // 一次開常用工具（✅ 已包含 Maps + Tabelog）
+  // ===== 一次開連結 =====
   document.getElementById("openAllTools").onclick = () => {
     const urls = [
       "https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing",
@@ -286,7 +284,6 @@
     urls.forEach((u,i)=>setTimeout(()=>window.open(u,"_blank"), i*150));
   };
 
-  // 一次開滑雪
   document.getElementById("openAllSki").onclick = () => {
     const urls = [
       "https://www.grand-hirafu.jp/en/tickets/",
@@ -294,6 +291,81 @@
     ];
     urls.forEach((u,i)=>setTimeout(()=>window.open(u,"_blank"), i*150));
   };
+
+  // ===== 共享備忘：讀寫 =====
+  const sharedNotes = document.getElementById("sharedNotes");
+  const rightInfo = document.getElementById("rightInfo");
+  const statusText = document.getElementById("statusText");
+  const dot = document.getElementById("dot");
+
+  function setStatus(type, msg, infoText){
+    dot.className = "dot" + (type ? (" " + type) : "");
+    statusText.textContent = msg || "";
+    if(infoText !== undefined) rightInfo.textContent = infoText;
+  }
+
+  function nowStr(){
+    const d = new Date();
+    return d.toLocaleString();
+  }
+
+  async function loadSharedNotes(){
+    setStatus("warn", "正在載入共享備忘…", "載入中…");
+    try{
+      const res = await fetch(API_URL, { method: "GET", cache: "no-store" });
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      sharedNotes.value = (data && typeof data.content === "string") ? data.content : "";
+      setStatus("ok", "已載入（" + nowStr() + "）", "已載入");
+    }catch(e){
+      console.error(e);
+      setStatus("bad", "載入失敗：請確認 Apps Script 已部署為任何人可存取", "載入失敗");
+      alert("載入共享備忘失敗。\n可能原因：Apps Script 權限/部署設定、或網路阻擋。\n\n錯誤：" + (e.message || e));
+    }
+  }
+
+  async function saveSharedNotes(){
+    const content = sharedNotes.value || "";
+    if(!content.trim()){
+      if(!confirm("內容是空白，仍然要儲存嗎？")) return;
+    }
+    setStatus("warn", "正在儲存…", "儲存中…");
+
+    const payload = {
+      content,
+      updatedBy: "Trip Hub User"
+    };
+
+    try{
+      const res = await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+      if(!res.ok) throw new Error("HTTP " + res.status);
+      setStatus("ok", "儲存成功（" + nowStr() + "）", "已更新");
+      alert("共享備忘已更新（所有人可見）");
+    }catch(e){
+      console.error(e);
+      setStatus("bad", "儲存失敗：請確認 Apps Script 可公開存取", "儲存失敗");
+      alert("儲存共享備忘失敗。\n可能原因：Apps Script 部署/權限、或瀏覽器阻擋跨網域。\n\n錯誤：" + (e.message || e));
+    }
+  }
+
+  document.getElementById("loadShared").onclick = loadSharedNotes;
+  document.getElementById("saveShared").onclick = saveSharedNotes;
+
+  document.getElementById("copyShared").onclick = async () => {
+    try{
+      await navigator.clipboard.writeText(sharedNotes.value || "");
+      alert("已複製到剪貼簿");
+    }catch{
+      alert("你的瀏覽器不允許自動複製，可手動選取複製。");
+    }
+  };
+
+  // 頁面載入：自動抓共享備忘
+  loadSharedNotes();
 </script>
 
 </body>
