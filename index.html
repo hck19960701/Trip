@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Trip Hub</title>
+  <style>
+    :root{
+      --bg:#0b0f1a; --panel:#10182a; --btn:#0e1526;
+      --text:#eaf0ff; --muted:#a9b7d6; --border:#243656; --accent:#7aa2ff;
+    }
+    *{ box-sizing:border-box; font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans TC",Arial; }
+    body{ margin:0; background:linear-gradient(180deg,#071022 0%,#070a12 100%); color:var(--text); }
+    header{ padding:18px 18px 0; max-width:1100px; margin:0 auto; }
+    h1{ margin:0; font-size:20px; }
+    .sub{ margin:6px 0 0; color:var(--muted); font-size:13px; }
+
+    .wrap{ max-width:1100px; margin:0 auto; padding:18px; }
+    .grid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
+
+    .panel{
+      background:rgba(16,24,42,.92);
+      border:1px solid var(--border);
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      overflow:hidden;
+    }
+    .head{
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      display:flex; justify-content:space-between; align-items:center;
+    }
+    .title{ font-weight:700; font-size:14px; color:#cfe0ff; }
+    .small{ font-size:12px; color:var(--muted); }
+    .body{ padding:14px; }
+
+    .btnGrid{ display:grid; grid-template-columns: 1fr; gap:12px; }
+    .bigBtn{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:14px 14px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:var(--btn);
+      color:var(--text);
+      cursor:pointer;
+      text-decoration:none;
+      font-size:15px;
+    }
+    .bigBtn:hover{ border-color:var(--accent); filter:brightness(1.08); }
+    .bigBtn .hint{ color:var(--muted); font-size:12px; }
+
+    textarea{
+      width:100%;
+      min-height:220px;
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#0e1526;
+      color:var(--text);
+      outline:none;
+      resize:vertical;
+      font-size:14px;
+      line-height:1.45;
+    }
+
+    .row{ display:flex; gap:10px; flex-wrap:wrap; margin-top:10px; }
+    button{
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:var(--btn);
+      color:var(--text);
+      cursor:pointer;
+      font-size:13px;
+    }
+    button:hover{ filter:brightness(1.08); }
+    .pill{
+      display:inline-block;
+      padding:3px 8px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#0e1526;
+      color:var(--muted);
+      font-size:12px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Trip Hub</h1>
+  <p class="sub">按鈕直接開網站（行程 / 天氣 / 停車場）＋ 右邊快速備忘（自動保存）。</p>
+</header>
+
+<div class="wrap">
+  <div class="grid">
+
+    <!-- 左：按鈕 -->
+    <section class="panel">
+      <div class="head">
+        <div class="title">快速入口</div>
+        <div class="small"><span class="pill">一鍵開新分頁</span></div>
+      </div>
+      <div class="body">
+        <div class="btnGrid">
+          <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+             href="https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing">
+            <div>
+              <div>📅 行程列表（Google Sheets）</div>
+              <div class="hint">查看 / 編輯你的行程表</div>
+            </div>
+            <div>↗</div>
+          </a>
+
+          <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+             href="https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt">
+            <div>
+              <div>🌤️ 日本天氣（JMA）</div>
+              <div class="hint">查降雪 / 風雨 / 旅遊天氣</div>
+            </div>
+            <div>↗</div>
+          </a>
+
+          <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+             href="https://www.locationsmart.org/?tag=_service_parking&fbclid=IwVERDUAPJeUVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR6ssiv6PhqEedxS2tISnSzp160WObttracGFhmHj_QjcMUtXCFLLiPNm2EpBg">
+            <div>
+              <div>🅿️ 日本停車場參考（LocationSmart）</div>
+              <div class="hint">找停車位 / 收費資訊</div>
+            </div>
+            <div>↗</div>
+          </a>
+        </div>
+
+        <div class="row">
+          <button id="openAll">一次開三個</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右：備忘 -->
+    <section class="panel">
+      <div class="head">
+        <div class="title">快速備忘</div>
+        <div class="small"><span class="pill">自動保存</span></div>
+      </div>
+      <div class="body">
+        <textarea id="notes" placeholder="- 酒店地址\n- 租車/租裝備訂單號\n- QR code\n- 想去的店\n- 注意事項…"></textarea>
+        <div class="row">
+          <button id="clearNotes">清空備忘</button>
+          <button id="copyNotes">複製備忘</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+  const KEY = "trip_hub_notes_v1";
+  const notes = document.getElementById("notes");
+  notes.value = localStorage.getItem(KEY) || "";
+  notes.addEventListener("input", () => localStorage.setItem(KEY, notes.value || ""));
+
+  document.getElementById("clearNotes").onclick = () => {
+    if(!confirm("確定清空備忘？")) return;
+    notes.value = "";
+    localStorage.setItem(KEY, "");
+  };
+
+  document.getElementById("copyNotes").onclick = async () => {
+    try{
+      await navigator.clipboard.writeText(notes.value || "");
+      alert("已複製到剪貼簿");
+    }catch{
+      alert("你的瀏覽器不允許自動複製，可手動選取複製。");
+    }
+  };
+
+  document.getElementById("openAll").onclick = () => {
+    const urls = [
+      "https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing",
+      "https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt",
+      "https://www.locationsmart.org/?tag=_service_parking&fbclid=IwVERDUAPJeUVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR6ssiv6PhqEedxS2tISnSzp160WObttracGFhmHj_QjcMUtXCFLLiPNm2EpBg"
+    ];
+    urls.forEach((u,i)=>setTimeout(()=>window.open(u,"_blank"), i*150));
+  };
+</script>
+
+</body>
+</html>
