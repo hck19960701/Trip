@@ -31,9 +31,20 @@
       border-bottom:1px solid var(--border);
       display:flex; justify-content:space-between; align-items:center;
     }
-    .title{ font-weight:700; font-size:14px; color:#cfe0ff; }
+    .title{ font-weight:700; font-size:14px; color:#cfe0ff; display:flex; gap:10px; align-items:center; }
     .small{ font-size:12px; color:var(--muted); }
     .body{ padding:14px; }
+
+    .section{ margin-bottom:14px; }
+    .section:last-child{ margin-bottom:0; }
+    .sectionTitle{
+      display:flex; align-items:center; justify-content:space-between;
+      margin:0 0 10px;
+      color:#cfe0ff;
+      font-size:13px;
+      font-weight:700;
+    }
+    .sectionTitle .tag{ font-weight:500; color:var(--muted); font-size:12px; }
 
     .btnGrid{ display:grid; grid-template-columns: 1fr; gap:12px; }
     .bigBtn{
@@ -48,7 +59,7 @@
       font-size:15px;
     }
     .bigBtn:hover{ border-color:var(--accent); filter:brightness(1.08); }
-    .bigBtn .hint{ color:var(--muted); font-size:12px; }
+    .bigBtn .hint{ color:var(--muted); font-size:12px; margin-top:3px; }
 
     textarea{
       width:100%;
@@ -84,68 +95,150 @@
       color:var(--muted);
       font-size:12px;
     }
+
+    .version{
+      position:fixed;
+      right:14px;
+      bottom:14px;
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:rgba(14,21,38,.85);
+      color:var(--muted);
+      font-size:12px;
+      backdrop-filter: blur(6px);
+    }
   </style>
 </head>
 <body>
 
 <header>
   <h1>Trip Hub</h1>
-  <p class="sub">按鈕直接開網站（行程 / 天氣 / 停車場）＋ 右邊快速備忘（自動保存）。</p>
+  <p class="sub">分區按鈕直接開網站（滑雪 / 常用工具）＋ 右邊快速備忘（自動保存）。</p>
 </header>
 
 <div class="wrap">
   <div class="grid">
 
-    <!-- 左：按鈕 -->
+    <!-- 左：按鈕分區 -->
     <section class="panel">
       <div class="head">
-        <div class="title">快速入口</div>
-        <div class="small"><span class="pill">一鍵開新分頁</span></div>
+        <div class="title">快速入口 <span class="pill">一鍵開新分頁</span></div>
+        <div class="small">分享給朋友也可用</div>
       </div>
+
       <div class="body">
-        <div class="btnGrid">
-          <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-             href="https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing">
-            <div>
-              <div>📅 行程列表（Google Sheets）</div>
-              <div class="hint">查看 / 編輯你的行程表</div>
-            </div>
-            <div>↗</div>
-          </a>
 
-          <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-             href="https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt">
-            <div>
-              <div>🌤️ 日本天氣（JMA）</div>
-              <div class="hint">查降雪 / 風雨 / 旅遊天氣</div>
-            </div>
-            <div>↗</div>
-          </a>
+        <!-- 滑雪區 -->
+        <div class="section">
+          <div class="sectionTitle">
+            <div>🎿 滑雪</div>
+            <div class="tag">Niseko / Grand Hirafu</div>
+          </div>
 
-          <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-             href="https://www.locationsmart.org/?tag=_service_parking&fbclid=IwVERDUAPJeUVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR6ssiv6PhqEedxS2tISnSzp160WObttracGFhmHj_QjcMUtXCFLLiPNm2EpBg">
-            <div>
-              <div>🅿️ 日本停車場參考（LocationSmart）</div>
-              <div class="hint">找停車位 / 收費資訊</div>
-            </div>
-            <div>↗</div>
-          </a>
+          <div class="btnGrid">
+            <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+              href="https://www.grand-hirafu.jp/en/tickets/">
+              <div>
+                <div>🎟️ 二世古門票 / Lift Tickets</div>
+                <div class="hint">查看票種 / 價格 / 購買</div>
+              </div>
+              <div>↗</div>
+            </a>
+
+            <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+              href="https://www.grand-hirafu.jp/en/rentals/#winterSection">
+              <div>
+                <div>🧤 二世古租裝備 / Rentals</div>
+                <div class="hint">租借滑雪板 / 雪具 / 配件</div>
+              </div>
+              <div>↗</div>
+            </a>
+          </div>
+        </div>
+
+        <!-- 常用工具區 -->
+        <div class="section">
+          <div class="sectionTitle">
+            <div>🧰 常用工具</div>
+            <div class="tag">行程 / 天氣 / 地圖 / 餐廳 / 停車 / 簽證</div>
+          </div>
+
+          <div class="btnGrid">
+            <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+              href="https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing">
+              <div>
+                <div>📅 行程列表（Google Sheets）</div>
+                <div class="hint">查看 / 編輯你的行程表</div>
+              </div>
+              <div>↗</div>
+            </a>
+
+            <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+              href="https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt">
+              <div>
+                <div>🌤️ 日本天氣（JMA）</div>
+                <div class="hint">查降雪 / 風雨 / 旅遊天氣</div>
+              </div>
+              <div>↗</div>
+            </a>
+
+            <!-- ✅ 新增：Google Maps -->
+            <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+              href="https://www.google.com/maps">
+              <div>
+                <div>📍 Google Maps（地圖 / 導航）</div>
+                <div class="hint">找景點 / 導航 / 看附近</div>
+              </div>
+              <div>↗</div>
+            </a>
+
+            <!-- ✅ 新增：Tabelog -->
+            <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+              href="https://tabelog.com/en/">
+              <div>
+                <div>🍜 Tabelog（餐廳評價 / 訂位參考）</div>
+                <div class="hint">日本餐廳評分、熱門店搜尋</div>
+              </div>
+              <div>↗</div>
+            </a>
+
+            <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+              href="https://www.locationsmart.org/?tag=_service_parking&fbclid=IwVERDUAPJeUVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR6ssiv6PhqEedxS2tISnSzp160WObttracGFhmHj_QjcMUtXCFLLiPNm2EpBg">
+              <div>
+                <div>🅿️ 日本停車場參考（LocationSmart）</div>
+                <div class="hint">找停車位 / 收費資訊</div>
+              </div>
+              <div>↗</div>
+            </a>
+
+            <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+              href="https://www.vjw.digital.go.jp/main/#/vjwplo001">
+              <div>
+                <div>🛂 日本簽證 / VJW（Visit Japan Web）</div>
+                <div class="hint">入境資料 / 申報 / 旅客流程</div>
+              </div>
+              <div>↗</div>
+            </a>
+          </div>
         </div>
 
         <div class="row">
-          <button id="openAll">一次開三個</button>
+          <button id="openAllTools">一次開「常用工具」</button>
+          <button id="openAllSki">一次開「滑雪」</button>
         </div>
+
       </div>
     </section>
 
     <!-- 右：備忘 -->
     <section class="panel">
       <div class="head">
-        <div class="title">快速備忘</div>
-        <div class="small"><span class="pill">自動保存</span></div>
+        <div class="title">快速備忘 <span class="pill">自動保存</span></div>
+        <div class="small">每個人各自保存</div>
       </div>
       <div class="body">
-        <textarea id="notes" placeholder="- 酒店地址\n- 租車/租裝備訂單號\n- QR code\n- 想去的店\n- 注意事項…"></textarea>
+        <textarea id="notes" placeholder="【住宿 / 地址】\n\n【交通 / 停車 / 租車】\n\n【訂單 / QR Code】\n\n【想去的店】\n\n【注意事項】"></textarea>
         <div class="row">
           <button id="clearNotes">清空備忘</button>
           <button id="copyNotes">複製備忘</button>
@@ -156,10 +249,13 @@
   </div>
 </div>
 
+<!-- ✅ 版本號：你每次更新改這行就行 -->
+<div class="version" id="version">Version: 2026-01-07 v1.3</div>
+
 <script>
   const KEY = "trip_hub_notes_v1";
   const notes = document.getElementById("notes");
-  notes.value = localStorage.getItem(KEY) || "";
+  notes.value = localStorage.getItem(KEY) || notes.value;
   notes.addEventListener("input", () => localStorage.setItem(KEY, notes.value || ""));
 
   document.getElementById("clearNotes").onclick = () => {
@@ -177,11 +273,24 @@
     }
   };
 
-  document.getElementById("openAll").onclick = () => {
+  // 一次開常用工具（✅ 已包含 Maps + Tabelog）
+  document.getElementById("openAllTools").onclick = () => {
     const urls = [
       "https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing",
       "https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt",
-      "https://www.locationsmart.org/?tag=_service_parking&fbclid=IwVERDUAPJeUVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR6ssiv6PhqEedxS2tISnSzp160WObttracGFhmHj_QjcMUtXCFLLiPNm2EpBg"
+      "https://www.google.com/maps",
+      "https://tabelog.com/en/",
+      "https://www.locationsmart.org/?tag=_service_parking&fbclid=IwVERDUAPJeUVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR6ssiv6PhqEedxS2tISnSzp160WObttracGFhmHj_QjcMUtXCFLLiPNm2EpBg",
+      "https://www.vjw.digital.go.jp/main/#/vjwplo001"
+    ];
+    urls.forEach((u,i)=>setTimeout(()=>window.open(u,"_blank"), i*150));
+  };
+
+  // 一次開滑雪
+  document.getElementById("openAllSki").onclick = () => {
+    const urls = [
+      "https://www.grand-hirafu.jp/en/tickets/",
+      "https://www.grand-hirafu.jp/en/rentals/#winterSection"
     ];
     urls.forEach((u,i)=>setTimeout(()=>window.open(u,"_blank"), i*150));
   };
