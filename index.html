@@ -64,7 +64,7 @@
 
     textarea{
       width:100%;
-      min-height:260px;
+      min-height:280px;
       padding:12px;
       border-radius:14px;
       border:1px solid var(--border);
@@ -125,7 +125,7 @@
 
 <header>
   <h1>Trip Hub</h1>
-  <p class="sub">分區按鈕直接開網站（滑雪 / 常用工具）＋ 右邊共享備忘（所有人可見）。</p>
+  <p class="sub">分區按鈕直接開網站（滑雪 / 常用工具）＋ 右邊共享備忘（所有人可見，可寫入）。</p>
 </header>
 
 <div class="wrap">
@@ -265,10 +265,10 @@
   </div>
 </div>
 
-<div class="version">Version: 2026-01-07 v1.4</div>
+<div class="version">Version: 2026-01-07 v1.5</div>
 
 <script>
-  // ✅ 你的 Google Apps Script Web App URL
+  // ✅ 你的 Google Apps Script Web App URL（JSONP 版）
   const API_URL = "https://script.google.com/macros/s/AKfycbzMloCs3ijsf-7SlajvG6PaB93tXnto3bpl26nKyc0TphEFmvWHa2YGl_CDffGr0Z1T/exec";
 
   // ===== 一次開連結 =====
@@ -292,7 +292,7 @@
     urls.forEach((u,i)=>setTimeout(()=>window.open(u,"_blank"), i*150));
   };
 
-  // ===== 共享備忘：讀寫 =====
+  // ===== UI helpers =====
   const sharedNotes = document.getElementById("sharedNotes");
   const rightInfo = document.getElementById("rightInfo");
   const statusText = document.getElementById("statusText");
@@ -305,50 +305,84 @@
   }
 
   function nowStr(){
-    const d = new Date();
-    return d.toLocaleString();
+    return new Date().toLocaleString();
   }
 
-  async function loadSharedNotes(){
+  // ===== JSONP helper（避開 CORS/fetch）=====
+  function jsonp(url, timeoutMs = 12000) {
+    return new Promise((resolve, reject) => {
+      const cbName = "cb_" + Math.random().toString(36).slice(2);
+      const sep = url.includes("?") ? "&" : "?";
+      const full = `${url}${sep}callback=${cbName}`;
+
+      const script = document.createElement("script");
+      let timer = setTimeout(() => {
+        cleanup();
+        reject(new Error("JSONP timeout"));
+      }, timeoutMs);
+
+      function cleanup() {
+        clearTimeout(timer);
+        try { delete window[cbName]; } catch {}
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      window[cbName] = (data) => {
+        cleanup();
+        resolve(data);
+      };
+
+      script.onerror = () => {
+        cleanup();
+        reject(new Error("JSONP load error"));
+      };
+
+      script.src = full;
+      document.body.appendChild(script);
+    });
+  }
+
+  // ===== 共享備忘：讀 =====
+  async function loadSharedNotes() {
     setStatus("warn", "正在載入共享備忘…", "載入中…");
-    try{
-      const res = await fetch(API_URL, { method: "GET", cache: "no-store" });
-      if(!res.ok) throw new Error("HTTP " + res.status);
-      const data = await res.json();
+    try {
+      const data = await jsonp(API_URL);
       sharedNotes.value = (data && typeof data.content === "string") ? data.content : "";
       setStatus("ok", "已載入（" + nowStr() + "）", "已載入");
-    }catch(e){
+    } catch (e) {
       console.error(e);
-      setStatus("bad", "載入失敗：請確認 Apps Script 已部署為任何人可存取", "載入失敗");
-      alert("載入共享備忘失敗。\n可能原因：Apps Script 權限/部署設定、或網路阻擋。\n\n錯誤：" + (e.message || e));
+      setStatus("bad", "載入失敗", "載入失敗");
+      alert("載入共享備忘失敗。\n\n錯誤：" + (e.message || e));
     }
   }
 
-  async function saveSharedNotes(){
+  // ===== 共享備忘：寫 =====
+  async function saveSharedNotes() {
     const content = sharedNotes.value || "";
-    if(!content.trim()){
-      if(!confirm("內容是空白，仍然要儲存嗎？")) return;
+    if (!content.trim()) {
+      if (!confirm("內容是空白，仍然要儲存嗎？")) return;
     }
+
     setStatus("warn", "正在儲存…", "儲存中…");
 
-    const payload = {
-      content,
-      updatedBy: "Trip Hub User"
-    };
+    try {
+      const url =
+        API_URL +
+        "?mode=save" +
+        "&content=" + encodeURIComponent(content) +
+        "&updatedBy=" + encodeURIComponent("TripHub");
 
-    try{
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-      if(!res.ok) throw new Error("HTTP " + res.status);
-      setStatus("ok", "儲存成功（" + nowStr() + "）", "已更新");
-      alert("共享備忘已更新（所有人可見）");
-    }catch(e){
+      const data = await jsonp(url);
+      if (data && data.status === "ok") {
+        setStatus("ok", "儲存成功（" + nowStr() + "）", "已更新");
+        alert("共享備忘已更新（所有人可見）");
+      } else {
+        throw new Error("save failed");
+      }
+    } catch (e) {
       console.error(e);
-      setStatus("bad", "儲存失敗：請確認 Apps Script 可公開存取", "儲存失敗");
-      alert("儲存共享備忘失敗。\n可能原因：Apps Script 部署/權限、或瀏覽器阻擋跨網域。\n\n錯誤：" + (e.message || e));
+      setStatus("bad", "儲存失敗", "儲存失敗");
+      alert("儲存共享備忘失敗。\n\n錯誤：" + (e.message || e));
     }
   }
 
