@@ -64,7 +64,7 @@
 
     textarea{
       width:100%;
-      min-height:280px;
+      min-height:260px;
       padding:12px;
       border-radius:14px;
       border:1px solid var(--border);
@@ -88,6 +88,7 @@
     }
     button:hover{ filter:brightness(1.08); }
     button.primary{ border-color:var(--accent); }
+
     .pill{
       display:inline-block;
       padding:3px 8px;
@@ -97,6 +98,17 @@
       color:var(--muted);
       font-size:12px;
     }
+
+    .pillBtn{
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#0e1526;
+      color:var(--text);
+      cursor:pointer;
+      font-size:13px;
+    }
+    .pillBtn:hover{ border-color:var(--accent); filter:brightness(1.08); }
 
     .statusLine{
       display:flex; gap:10px; flex-wrap:wrap; align-items:center;
@@ -119,13 +131,23 @@
       font-size:12px;
       backdrop-filter: blur(6px);
     }
+
+    .miniCard{
+      border:1px solid var(--border);
+      background:#0e1526;
+      border-radius:14px;
+      padding:12px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
+    }
   </style>
 </head>
 <body>
 
 <header>
   <h1>Trip Hub</h1>
-  <p class="sub">分區按鈕直接開網站（滑雪 / 常用工具）＋ 右邊共享備忘（所有人可見，可寫入）。</p>
+  <p class="sub">分區按鈕直接開網站（滑雪 / 常用工具）＋ 右邊共享備忘（所有人可見、可寫入）＋ 天氣快覽 / 一鍵模板 / 倒數提醒。</p>
 </header>
 
 <div class="wrap">
@@ -213,7 +235,7 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-               href="https://www.locationsmart.org/?tag=_service_parking&fbclid=IwVERDUAPJeUVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR6ssiv6PhqEedxS2tISnSzp160WObttracGFhmHj_QjcMUtXCFLLiPNm2EpBg">
+               href="https://www.locationsmart.org/?tag=_service_parking">
               <div>
                 <div>🅿️ 日本停車場參考（LocationSmart）</div>
                 <div class="hint">找停車位 / 收費資訊</div>
@@ -246,6 +268,7 @@
         <div class="title">共享備忘 <span class="pill">所有人可見</span></div>
         <div class="small" id="rightInfo">載入中…</div>
       </div>
+
       <div class="body">
         <textarea id="sharedNotes" placeholder="【住宿 / 地址】&#10;&#10;【交通 / 停車 / 租車】&#10;&#10;【訂單 / QR Code】&#10;&#10;【想去的店】&#10;&#10;【注意事項】"></textarea>
 
@@ -259,17 +282,68 @@
           <span class="dot" id="dot"></span>
           <span id="statusText">尚未載入</span>
         </div>
+
+        <!-- 天氣快覽 -->
+        <div class="section" style="margin-top:14px;">
+          <div class="sectionTitle">
+            <div>🌤️ 天氣快覽</div>
+            <div class="tag">不用 API（開新分頁查詢）</div>
+          </div>
+          <div class="row">
+            <button class="pillBtn" onclick="openWeather('Niseko')">二世谷</button>
+            <button class="pillBtn" onclick="openWeather('Sapporo')">札幌</button>
+            <button class="pillBtn" onclick="openWeather('Otaru')">小樽</button>
+            <button class="pillBtn" onclick="openWeather('Furano')">富良野</button>
+            <button class="pillBtn" onclick="window.open('https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt','_blank')">JMA</button>
+          </div>
+          <div class="small" style="margin-top:8px;">
+            提示：會用 Google 搜「即時天氣/降雪預報」。
+          </div>
+        </div>
+
+        <!-- 一鍵模板 -->
+        <div class="section" style="margin-top:14px;">
+          <div class="sectionTitle">
+            <div>🧾 一鍵模板</div>
+            <div class="tag">直接插入到共享備忘</div>
+          </div>
+          <div class="row">
+            <button onclick="insertTemplate('hotel')">🏨 住宿模板</button>
+            <button onclick="insertTemplate('transport')">🚗 交通/租車模板</button>
+            <button onclick="insertTemplate('ski')">🎿 滑雪日模板</button>
+          </div>
+        </div>
+
+        <!-- 倒數 / 今日提醒 -->
+        <div class="section" style="margin-top:14px;">
+          <div class="sectionTitle">
+            <div>⏳ 行程倒數 / 今日提醒</div>
+            <div class="tag" id="countdownTag">計算中…</div>
+          </div>
+          <div class="miniCard" id="todayReminder">—</div>
+        </div>
+
       </div>
     </section>
 
   </div>
 </div>
 
-<div class="version">Version: 2026-01-07 v1.5</div>
+<div class="version">Version: 2026-01-07 v1.6</div>
 
 <script>
-  // ✅ 你的 Google Apps Script Web App URL（JSONP 版）
+  // ✅ 你的 Google Apps Script Web App URL（JSONP + mode=save）
   const API_URL = "https://script.google.com/macros/s/AKfycbzMloCs3ijsf-7SlajvG6PaB93tXnto3bpl26nKyc0TphEFmvWHa2YGl_CDffGr0Z1T/exec";
+
+  // ✅ 出發日期（請改成你的出發日）
+  const TRIP_START_DATE = "2026-01-15"; // YYYY-MM-DD
+
+  // 每週提醒（0=日...6=六）可按你習慣改
+  const WEEKLY_REMINDERS = {
+    1: "✅ 今日建議：確認行程表（交通時間/集合點），把地址貼到共享備忘。",
+    5: "✅ 今日建議：確認雪票/租裝備，整理手套、護目鏡、暖包。",
+    6: "✅ 今日建議：檢查天氣 & 道路狀況，下載離線地圖。"
+  };
 
   // ===== 一次開連結 =====
   document.getElementById("openAllTools").onclick = () => {
@@ -278,7 +352,7 @@
       "https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt",
       "https://www.google.com/maps",
       "https://tabelog.com/en/",
-      "https://www.locationsmart.org/?tag=_service_parking&fbclid=IwVERDUAPJeUVzcnRjBmFwcF9pZAwzNTA2ODU1MzE3MjgAAR6ssiv6PhqEedxS2tISnSzp160WObttracGFhmHj_QjcMUtXCFLLiPNm2EpBg",
+      "https://www.locationsmart.org/?tag=_service_parking",
       "https://www.vjw.digital.go.jp/main/#/vjwplo001"
     ];
     urls.forEach((u,i)=>setTimeout(()=>window.open(u,"_blank"), i*150));
@@ -308,7 +382,13 @@
     return new Date().toLocaleString();
   }
 
-  // ===== JSONP helper（避開 CORS/fetch）=====
+  // ===== 天氣快覽（不用 API）=====
+  function openWeather(city){
+    const q = encodeURIComponent(`${city} weather snow forecast`);
+    window.open(`https://www.google.com/search?q=${q}`, "_blank");
+  }
+
+  // ===== JSONP helper（避開 CORS）=====
   function jsonp(url, timeoutMs = 12000) {
     return new Promise((resolve, reject) => {
       const cbName = "cb_" + Math.random().toString(36).slice(2);
@@ -398,8 +478,45 @@
     }
   };
 
-  // 頁面載入：自動抓共享備忘
+  // ===== 一鍵模板 =====
+  const TEMPLATES = {
+    hotel: `\n\n【住宿】\n飯店/民宿：\n地址：\nCheck-in：\nCheck-out：\n訂單/QR：\n備註：\n`,
+    transport: `\n\n【交通 / 租車】\n取車地點：\n還車地點：\n停車場/費用：\n導航關鍵字：\n注意事項：\n`,
+    ski: `\n\n【滑雪日】\n日期：\n集合時間/地點：\n雪票：\n租裝備：\n教練/課程：\n晚餐：\n備註：\n`,
+  };
+
+  function insertTemplate(key){
+    const t = TEMPLATES[key] || "";
+    sharedNotes.value = (sharedNotes.value || "") + t;
+    sharedNotes.focus();
+  }
+
+  // ===== 倒數 / 今日提醒 =====
+  function updateCountdown(){
+    const start = new Date(TRIP_START_DATE + "T00:00:00");
+    const now = new Date();
+    const ms = start - now;
+    const days = Math.ceil(ms / (1000*60*60*24));
+
+    const tag = document.getElementById("countdownTag");
+    if (tag) {
+      if (days > 0) tag.textContent = `距離出發：${days} 日`;
+      else if (days === 0) tag.textContent = "今天出發！";
+      else tag.textContent = `已出發：${Math.abs(days)} 日`;
+    }
+
+    const today = new Date().getDay();
+    const reminder = WEEKLY_REMINDERS[today]
+      || "✅ 今日建議：更新共享備忘（地址/集合時間/餐廳）＋ 快速看天氣。";
+
+    const el = document.getElementById("todayReminder");
+    if (el) el.textContent = reminder;
+  }
+
+  // 頁面載入：自動抓共享備忘 + 更新倒數
   loadSharedNotes();
+  updateCountdown();
+  setInterval(updateCountdown, 30 * 60 * 1000);
 </script>
 
 </body>
