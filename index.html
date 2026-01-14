@@ -4,6 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Trip Hub</title>
+
+  <!-- Google Analytics 4 (GA4) - anonymous analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN2KPVP14D"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-NN2KPVP14D', {
+      anonymize_ip: true,
+      send_page_view: true
+    });
+  </script>
+
   <style>
     :root{
       --bg:#0b0f1a; --panel:#10182a; --btn:#0e1526;
@@ -171,7 +184,8 @@
 
           <div class="btnGrid">
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-               href="https://www.grand-hirafu.jp/en/tickets/">
+               href="https://www.grand-hirafu.jp/en/tickets/"
+               onclick="track('open_lift_tickets')">
               <div>
                 <div>🎟️ 二世古門票 / Lift Tickets</div>
                 <div class="hint">查看票種 / 價格 / 購買</div>
@@ -180,10 +194,22 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-               href="https://www.grand-hirafu.jp/en/rentals/#winterSection">
+               href="https://www.grand-hirafu.jp/en/rentals/#winterSection"
+               onclick="track('open_rentals')">
               <div>
                 <div>🧤 二世古租裝備 / Rentals</div>
                 <div class="hint">租借滑雪板 / 雪具 / 配件</div>
+              </div>
+              <div>↗</div>
+            </a>
+
+            <!-- ✅ Tokyu reservation login (added) -->
+            <a class="bigBtn" target="_blank" rel="noopener noreferrer"
+               href="https://www.reserve.tokyu-snow-resort.com/en/login"
+               onclick="track('open_tokyu_login')">
+              <div>
+                <div>🔐 Tokyu Snow Resort 登入</div>
+                <div class="hint">查看 / 管理你的雪票與租裝備訂單</div>
               </div>
               <div>↗</div>
             </a>
@@ -199,7 +225,8 @@
 
           <div class="btnGrid">
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-               href="https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing">
+               href="https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing"
+               onclick="track('open_itinerary_sheet')">
               <div>
                 <div>📅 行程列表（Google Sheets）</div>
                 <div class="hint">查看 / 編輯你的行程表</div>
@@ -208,7 +235,8 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-               href="https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt">
+               href="https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt"
+               onclick="track('open_jma')">
               <div>
                 <div>🌤️ 日本天氣（JMA）</div>
                 <div class="hint">查降雪 / 風雨 / 旅遊天氣</div>
@@ -217,7 +245,8 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-               href="https://www.google.com/maps">
+               href="https://www.google.com/maps"
+               onclick="track('open_maps')">
               <div>
                 <div>📍 Google Maps（地圖 / 導航）</div>
                 <div class="hint">找景點 / 導航 / 看附近</div>
@@ -226,7 +255,8 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-               href="https://tabelog.com/en/">
+               href="https://tabelog.com/en/"
+               onclick="track('open_tabelog')">
               <div>
                 <div>🍜 Tabelog（餐廳評價 / 訂位參考）</div>
                 <div class="hint">日本餐廳評分、熱門店搜尋</div>
@@ -235,7 +265,8 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-               href="https://www.locationsmart.org/?tag=_service_parking">
+               href="https://www.locationsmart.org/?tag=_service_parking"
+               onclick="track('open_parking_locationsmart')">
               <div>
                 <div>🅿️ 日本停車場參考（LocationSmart）</div>
                 <div class="hint">找停車位 / 收費資訊</div>
@@ -244,7 +275,8 @@
             </a>
 
             <a class="bigBtn" target="_blank" rel="noopener noreferrer"
-               href="https://www.vjw.digital.go.jp/main/#/vjwplo001">
+               href="https://www.vjw.digital.go.jp/main/#/vjwplo001"
+               onclick="track('open_vjw')">
               <div>
                 <div>🛂 日本簽證 / VJW（Visit Japan Web）</div>
                 <div class="hint">入境資料 / 申報 / 旅客流程</div>
@@ -294,7 +326,7 @@
             <button class="pillBtn" onclick="openWeather('Sapporo')">札幌</button>
             <button class="pillBtn" onclick="openWeather('Otaru')">小樽</button>
             <button class="pillBtn" onclick="openWeather('Furano')">富良野</button>
-            <button class="pillBtn" onclick="window.open('https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt','_blank')">JMA</button>
+            <button class="pillBtn" onclick="track('open_jma_from_quick'); window.open('https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt','_blank')">JMA</button>
           </div>
           <div class="small" style="margin-top:8px;">
             提示：會用 Google 搜「即時天氣/降雪預報」。
@@ -308,9 +340,9 @@
             <div class="tag">直接插入到共享備忘</div>
           </div>
           <div class="row">
-            <button onclick="insertTemplate('hotel')">🏨 住宿模板</button>
-            <button onclick="insertTemplate('transport')">🚗 交通/租車模板</button>
-            <button onclick="insertTemplate('ski')">🎿 滑雪日模板</button>
+            <button onclick="track('insert_template_hotel'); insertTemplate('hotel')">🏨 住宿模板</button>
+            <button onclick="track('insert_template_transport'); insertTemplate('transport')">🚗 交通/租車模板</button>
+            <button onclick="track('insert_template_ski'); insertTemplate('ski')">🎿 滑雪日模板</button>
           </div>
         </div>
 
@@ -329,7 +361,7 @@
   </div>
 </div>
 
-<div class="version">Version: 2026-01-07 v1.6</div>
+<div class="version">Version: 2026-01-07 v1.8 (GA4 + Tokyu)</div>
 
 <script>
   // ✅ 你的 Google Apps Script Web App URL（JSONP + mode=save）
@@ -345,8 +377,18 @@
     6: "✅ 今日建議：檢查天氣 & 道路狀況，下載離線地圖。"
   };
 
+  // ===== GA4 event helper =====
+  function track(eventName, params = {}) {
+    try {
+      if (typeof gtag === "function") {
+        gtag("event", eventName, params);
+      }
+    } catch (e) {}
+  }
+
   // ===== 一次開連結 =====
   document.getElementById("openAllTools").onclick = () => {
+    track("open_all_tools");
     const urls = [
       "https://docs.google.com/spreadsheets/d/1oJaNPFrQoLH7rc93H0zLvm41DSs3kXLYwXq-C78i15c/edit?usp=sharing",
       "https://www.data.jma.go.jp/multi/yoho/index.html?forecast=weather0&lang=cn_zt",
@@ -359,9 +401,11 @@
   };
 
   document.getElementById("openAllSki").onclick = () => {
+    track("open_all_ski");
     const urls = [
       "https://www.grand-hirafu.jp/en/tickets/",
-      "https://www.grand-hirafu.jp/en/rentals/#winterSection"
+      "https://www.grand-hirafu.jp/en/rentals/#winterSection",
+      "https://www.reserve.tokyu-snow-resort.com/en/login"
     ];
     urls.forEach((u,i)=>setTimeout(()=>window.open(u,"_blank"), i*150));
   };
@@ -384,6 +428,7 @@
 
   // ===== 天氣快覽（不用 API）=====
   function openWeather(city){
+    track("open_weather_search", { city });
     const q = encodeURIComponent(`${city} weather snow forecast`);
     window.open(`https://www.google.com/search?q=${q}`, "_blank");
   }
@@ -417,7 +462,8 @@
         reject(new Error("JSONP load error"));
       };
 
-      script.src = full;
+      // cache bust
+      script.src = full + `&_=${Date.now()}`;
       document.body.appendChild(script);
     });
   }
@@ -425,13 +471,16 @@
   // ===== 共享備忘：讀 =====
   async function loadSharedNotes() {
     setStatus("warn", "正在載入共享備忘…", "載入中…");
+    track("shared_notes_load_start");
     try {
       const data = await jsonp(API_URL);
       sharedNotes.value = (data && typeof data.content === "string") ? data.content : "";
       setStatus("ok", "已載入（" + nowStr() + "）", "已載入");
+      track("shared_notes_load_ok", { length: (sharedNotes.value || "").length });
     } catch (e) {
       console.error(e);
       setStatus("bad", "載入失敗", "載入失敗");
+      track("shared_notes_load_fail", { message: (e && e.message) ? e.message : String(e) });
       alert("載入共享備忘失敗。\n\n錯誤：" + (e.message || e));
     }
   }
@@ -444,6 +493,7 @@
     }
 
     setStatus("warn", "正在儲存…", "儲存中…");
+    track("shared_notes_save_start", { length: content.length });
 
     try {
       const url =
@@ -455,6 +505,7 @@
       const data = await jsonp(url);
       if (data && data.status === "ok") {
         setStatus("ok", "儲存成功（" + nowStr() + "）", "已更新");
+        track("shared_notes_save_ok", { length: content.length });
         alert("共享備忘已更新（所有人可見）");
       } else {
         throw new Error("save failed");
@@ -462,19 +513,30 @@
     } catch (e) {
       console.error(e);
       setStatus("bad", "儲存失敗", "儲存失敗");
+      track("shared_notes_save_fail", { message: (e && e.message) ? e.message : String(e) });
       alert("儲存共享備忘失敗。\n\n錯誤：" + (e.message || e));
     }
   }
 
-  document.getElementById("loadShared").onclick = loadSharedNotes;
-  document.getElementById("saveShared").onclick = saveSharedNotes;
+  document.getElementById("loadShared").onclick = () => {
+    track("click_reload_shared");
+    loadSharedNotes();
+  };
+
+  document.getElementById("saveShared").onclick = () => {
+    track("click_save_shared");
+    saveSharedNotes();
+  };
 
   document.getElementById("copyShared").onclick = async () => {
+    track("click_copy_shared");
     try{
       await navigator.clipboard.writeText(sharedNotes.value || "");
       alert("已複製到剪貼簿");
+      track("copy_shared_ok", { length: (sharedNotes.value || "").length });
     }catch{
       alert("你的瀏覽器不允許自動複製，可手動選取複製。");
+      track("copy_shared_fail");
     }
   };
 
@@ -514,6 +576,7 @@
   }
 
   // 頁面載入：自動抓共享備忘 + 更新倒數
+  track("page_loaded");
   loadSharedNotes();
   updateCountdown();
   setInterval(updateCountdown, 30 * 60 * 1000);
